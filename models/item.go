@@ -9,14 +9,11 @@ import (
 	"github.com/mediocregopher/radix.v2/pool"
 )
 
-// Declare a global db variable to store the Redis connection pool.
 var db *pool.Pool
 var ErrNoItem = errors.New("models: no items found")
 
 func init() {
 	var err error
-	// Establish a pool of 10 connections to the Redis server listening on
-	// port 6379 of the local machine.
 	db, err = pool.New("tcp", "localhost:6379", 10)
 	if err != nil {
 		log.Panic(err)
@@ -30,7 +27,6 @@ type Item struct {
 	Price   int    `json:"price"`
 }
 
-// Validate validates the Item fields.
 func (m Item) Validate() error {
 	return validation.ValidateStruct(&m,
 		validation.Field(&m.Name, validation.Required, validation.Length(0, 50)),

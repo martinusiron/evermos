@@ -10,12 +10,9 @@ import (
 var Config appConfig
 
 type appConfig struct {
-	// the path to the error message file. Defaults to "config/errors.yaml"
-	ErrorFile string `mapstructure:"error_file"`
-	// the server port. Defaults to 8080
-	ServerPort int `mapstructure:"server_port"`
-	// the data source name (DSN) for connecting to the database. required.
-	DSN string `mapstructure:"dsn"`
+	ErrorFile  string `mapstructure:"error_file"`
+	ServerPort int    `mapstructure:"server_port"`
+	DSN        string `mapstructure:"dsn"`
 }
 
 func (config appConfig) Validate() error {
@@ -24,9 +21,6 @@ func (config appConfig) Validate() error {
 	)
 }
 
-// LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
-// The configuration file(s) should be named as app.yaml.
-// Environment variables with the prefix "RESTFUL_" in their names are also read automatically.
 func LoadConfig(configPaths ...string) error {
 	v := viper.New()
 	v.SetConfigName("app")

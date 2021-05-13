@@ -14,8 +14,6 @@ var ErrorNoCustomer = errors.New("models: no customers found")
 
 func init() {
 	var err error
-	// Establish a pool of 10 connections to the Redis server listening on
-	// port 6379 of the local machine.
 	db, err = pool.New("tcp", "localhost:6379", 10)
 	if err != nil {
 		log.Panic(err)
@@ -29,7 +27,6 @@ type Customer struct {
 	Address    string `json:"address"`
 }
 
-// Validate customer fields
 func (m Customer) Validate() error {
 	return validation.ValidateStruct(&m,
 		validation.Field(&m.First_name, validation.Required, validation.Length(0, 50)),

@@ -1,6 +1,7 @@
 package daos
 
 import (
+	"errors"
 	"strconv"
 
 	dbx "github.com/go-ozzo/ozzo-dbx"
@@ -31,6 +32,23 @@ func (dao *OrderDAO) Get(rs app.RequestScope, id int) (*models.Purchase_Order, e
 
 func (dao *OrderDAO) Create(rs app.RequestScope, order *models.Purchase_Order) error {
 	order.Purchase_order_id = 0
+
+	item, err := NewItemDAO().Get(rs, order.Item_id)
+	if err != nil {
+		return nil
+	}
+
+	setStock := item.Stock - order.Quantity
+	if order.Quantity > item.Stock || item.Stock <= 0 || setStock <= 0 {
+		return errors.New("Stock Not AVailable")
+	}
+
+	_ = NewItemDAO().Update(rs, order.Item_id, &models.Item{
+		Item_id: order.Item_id,
+		Name:    item.Name,
+		Stock:   setStock,
+		Price:   item.Price,
+	})
 	return rs.Tx().Model(order).Insert()
 }
 
@@ -64,7 +82,7 @@ func (dao *OrderDAO) Query(rs app.RequestScope, offset, limit int) ([]models.Pur
 
 func (dao *OrderDAO) GetCustomerCart(rs app.RequestScope, id int) ([]models.Purchase_Order, error) {
 	order := []models.Purchase_Order{}
-	err := rs.Tx().Select().Where(dbx.HashExp{"cust_id": id, "dispatched": false}).All(&order)
+	err := rs.Tx().Select().Where(dbx.HashExp{"cust_id": id, "is_pay": false}).All(&order)
 	return order, err
 }
 
@@ -73,12 +91,13 @@ func (dao *OrderDAO) GetCustomerCartPrice(rs app.RequestScope, id int) int {
 		Item_id    int
 		Quantity   int
 		Price      int
+		Is_Pay     bool
 		Dispatched bool
 	}
 
 	var orderPrices []OrderPrice
 	err := rs.Tx().NewQuery(
-		"select i.item_id, po.quantity, i.price, po.dispatched from purchase_order as po left join item as i on po.item_id = i.item_id where cust_id = 1 and dispatched = false")
+		"select i.item_id, po.quantity, i.price, po.dispatched from purchase_order as po left join item as i on po.item_id = i.item_id where cust_id = 1 and is_pay = false and dispatched = false")
 	err.All(&orderPrices)
 
 	totalPrice := 0

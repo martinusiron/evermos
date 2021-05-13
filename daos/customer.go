@@ -37,7 +37,7 @@ func (dao *CustomerDAO) Update(rs app.RequestScope, id int, customer *models.Cus
 		return err
 	}
 	customer.Cust_id = id
-	return rs.Tx().Model(customer).Exclude("Id").Update
+	return rs.Tx().Model(customer).Exclude("Id").Update()
 }
 
 func (dao *CustomerDAO) Delete(rs app.RequestScope, id int) error {

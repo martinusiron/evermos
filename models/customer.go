@@ -9,7 +9,6 @@ import (
 	"github.com/mediocregopher/radix.v2/pool"
 )
 
-var db *pool.Pool
 var ErrorNoCustomer = errors.New("models: no customers found")
 
 func init() {
@@ -36,7 +35,7 @@ func (m Customer) Validate() error {
 func PopulateCustomer(reply map[string]string) (*Customer, error) {
 	var err error
 	ab := new(Customer)
-	ab.cust_id, err = strconv.Atoi(reply["cust_id"])
+	ab.Cust_id, err = strconv.Atoi(reply["cust_id"])
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +57,7 @@ func FindCustomer(id string) (*Customer, error) {
 }
 
 func CacheCustomer(customer *Customer) error {
-	resp := db.Cmd("HMSET", "cust_id:"+strconv.Itoa(customer.Cust_id), "cust_id", strconv.Itoa(customer.Cust_id), "first_name", customer.First_name, "last_name", customer.Last_name, "post_address", customer.Post_address)
+	resp := db.Cmd("HMSET", "cust_id:"+strconv.Itoa(customer.Cust_id), "cust_id", strconv.Itoa(customer.Cust_id), "first_name", customer.First_name, "last_name", customer.Last_name, "address", customer.Address)
 	if resp.Err != nil {
 		log.Fatal(resp.Err)
 		return resp.Err

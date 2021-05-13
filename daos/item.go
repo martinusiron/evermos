@@ -29,7 +29,6 @@ func (dao *ItemDAO) Get(rs app.RequestScope, id int) (*models.Item, error) {
 }
 
 func (dao *ItemDAO) Create(rs app.RequestScope, item *models.Item) error {
-	item.Item_id = 0
 	return rs.Tx().Model(item).Insert()
 }
 

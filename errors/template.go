@@ -12,8 +12,7 @@ type (
 	Params map[string]interface{}
 
 	errorTemplate struct {
-		Message          string `yaml:"message"`
-		DeveloperMessage string `yaml:"developer_message"`
+		Message string `yaml:"message"`
 	}
 )
 
@@ -37,7 +36,6 @@ func NewAPIError(status int, code string, params Params) *APIError {
 
 	if template, ok := templates[code]; ok {
 		err.Message = template.getMessage(params)
-		err.DeveloperMessage = template.getDeveloperMessage(params)
 	}
 
 	return err
@@ -45,10 +43,6 @@ func NewAPIError(status int, code string, params Params) *APIError {
 
 func (e errorTemplate) getMessage(params Params) string {
 	return replacePlaceholders(e.Message, params)
-}
-
-func (e errorTemplate) getDeveloperMessage(params Params) string {
-	return replacePlaceholders(e.DeveloperMessage, params)
 }
 
 func replacePlaceholders(message string, params Params) string {

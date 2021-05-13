@@ -24,6 +24,7 @@ CREATE TABLE Purchase_Order
     cust_id INTEGER NOT NULL,
     item_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
+    is_pay BOOLEAN NOT NULL DEFAULT FALSE,
     dispatched BOOLEAN NOT NULL DEFAULT FALSE
 );
 -- All cart items are from the PurchaseOrder table mapped to a customer id with his/her item

@@ -8,7 +8,6 @@ import (
 	"github.com/mediocregopher/radix.v2/pool"
 )
 
-var db *pool.Pool
 var ErrNoOrder = errors.New("models: no order found")
 
 func init() {
@@ -24,6 +23,7 @@ type Purchase_Order struct {
 	Cust_id           int  `json:"cust_id"`
 	Item_id           int  `json:"item_id"`
 	Quantity          int  `json:"quantity"`
+	Is_Pay            bool `json:"is_pay"`
 	Dispatched        bool `json:"dispatched"`
 }
 
@@ -46,6 +46,7 @@ func PopulateOrder(reply map[string]string) (*Purchase_Order, error) {
 	if err != nil {
 		return nil, err
 	}
+	ab.Is_Pay, err = strconv.ParseBool(reply["is_pay"])
 	ab.Dispatched, err = strconv.ParseBool(reply["dispatched"])
 	return ab, nil
 }
@@ -62,7 +63,7 @@ func FindOrder(id string) (*Purchase_Order, error) {
 }
 
 func CacheOrder(order *Purchase_Order) error {
-	resp := db.Cmd("HMSET", "purchase_order_id:"+strconv.Itoa(order.Purchase_order_id), "purchase_order_id", strconv.Itoa(order.Purchase_order_id), "cust_id", strconv.Itoa(order.Cust_id), "item_id", order.Item_id, "quantity", strconv.Itoa(order.Quantity), "dispatched", strconv.FormatBool(order.Dispatched))
+	resp := db.Cmd("HMSET", "purchase_order_id:"+strconv.Itoa(order.Purchase_order_id), "purchase_order_id", strconv.Itoa(order.Purchase_order_id), "cust_id", strconv.Itoa(order.Cust_id), "item_id", order.Item_id, "quantity", strconv.Itoa(order.Quantity), "is_pay", strconv.FormatBool(order.Is_Pay), "dispatched", strconv.FormatBool(order.Dispatched))
 	if resp.Err != nil {
 		log.Fatal(resp.Err)
 		return resp.Err

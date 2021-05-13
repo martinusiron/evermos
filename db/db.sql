@@ -45,8 +45,4 @@ INSERT INTO Item (name, stock, price) VALUES ('Ties', 8, 20);
 INSERT INTO Customer (first_name, last_name, address) VALUES ('John', 'Doe', 'Jakarta');
 INSERT INTO Customer (first_name, last_name, address) VALUES ('Bob', 'Williams', 'Medan');
 
--- Adding Index
--- Note: better to load all data and then create the index. Use Explain Analyse to detect bottlenecks in query.
--- Add index on fields/columns that are commonly used in the 'WHERE' or 'Group By' clauses
--- If indexing joins, index the field on the left hand side of the assignment
--- CREATE INDEX item_idx ON Item (item_id);
+INSERT INTO Purchase_Order (cust_id, item_id, quantity, is_pay, dispatched) VALUES (1, 1, 2, false, false)

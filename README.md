@@ -40,4 +40,8 @@ Anda juga dapat melakukan functonal testing dengan terlebih dahulu masuk kedalam
 
 untuk melihat redis
 > redis-cli
+
+
+Untuk solusi Treasure Hunt ada di dalam projek denga file name Treasure_Hunt.c
+Cara menjalankan file tersebut adalah dengan mengcopy isi file tersebut, lalu di copy pada C compiler yang anda miliki.
 ```

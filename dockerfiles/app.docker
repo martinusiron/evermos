@@ -1,0 +1,22 @@
+# Base image
+FROM golang:alpine
+
+# Install some dependencies needed to build the project
+RUN apk add git
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# We want to populate the module cache based on the go.{mod,sum} files.
+COPY go.mod go.sum ./
+
+# `Magic step` that will download all dependencies
+RUN go mod download
+
+# Here we copy the rest of the source code
+COPY . .
+
+# Compiling...
+RUN CGO_ENABLED=0 go build -o /go/bin/evermos
+
+# Running...
+CMD ["evermos"]

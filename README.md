@@ -14,7 +14,7 @@ Dari permasalahan tersebut, maka saya menyarankan solusi:
    Hal ini juga dapat mengatasi jumlah stok barang minus.
 ```
 ```
-Untuk menjalankan API ini harus dipastikan GO, dan PostgreSql sudah terinstall di local. 
+Untuk menjalankan API ini harus dipastikan GO, dan PostgreSql, redis sudah terinstall di local. 
 Untuk menjalankan pada local anda, anda dapat terlebih dahulu melakukan pengaturan pada folder config/app.yaml sesuai pengaturan postgresql local anda
 dsn: "host=localhost port=5432 user=postgres password=12345678 dbname=evermos sslmode=disable"
 
@@ -38,4 +38,6 @@ dengan body
 Anda juga dapat melakukan functonal testing dengan terlebih dahulu masuk kedalam folde testing
 > go test
 
+untuk melihat redis
+> redis-cli
 ```
